@@ -49,9 +49,9 @@ RUN apt-get update \
         zip \
     && rm -rf /var/lib/apt/lists/*
 
+COPY . .
 COPY --from=vendor /app/vendor ./vendor
 COPY --from=frontend /app/public/build ./public/build
-COPY . .
 
 COPY docker/start.sh /usr/local/bin/start-chemsa
 RUN chmod +x /usr/local/bin/start-chemsa \
