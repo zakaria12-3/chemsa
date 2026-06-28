@@ -17,76 +17,102 @@ class FinanceCategorySeeder extends Seeder
         $categories = [
             // Income
             [
-                'name' => 'Penjualan Produk',
+                'name' => 'Product Sales',
                 'type' => FinanceCategoryType::Income,
-                'description' => 'Pendapatan langsung dari penjualan produk toko.',
+                'description' => 'Income from product sales.',
+                'legacy_slug' => 'penjualan-produk',
             ],
             [
-                'name' => 'Layanan Jasa',
+                'name' => 'Service Revenue',
                 'type' => FinanceCategoryType::Income,
-                'description' => 'Pendapatan dari layanan jasa service atau konsultasi.',
+                'description' => 'Income from services, repairs, or consultation.',
+                'legacy_slug' => 'layanan-jasa',
             ],
             [
-                'name' => 'Investasi',
+                'name' => 'Investment Income',
                 'type' => FinanceCategoryType::Income,
-                'description' => 'Dividen atau bunga dari investasi modal.',
+                'description' => 'Dividends or interest from investments.',
+                'legacy_slug' => 'investasi',
             ],
             [
-                'name' => 'Pendapatan Lain-lain',
+                'name' => 'Other Income',
                 'type' => FinanceCategoryType::Income,
-                'description' => 'Pendapatan di luar operasional utama.',
+                'description' => 'Income outside the main business activity.',
+                'legacy_slug' => 'pendapatan-lain-lain',
             ],
 
             // Expenses
             [
-                'name' => 'Gaji Karyawan',
+                'name' => 'Employee Salaries',
                 'type' => FinanceCategoryType::Expense,
-                'description' => 'Biaya gaji bulanan dan tunjangan karyawan.',
+                'description' => 'Monthly salaries and employee benefits.',
+                'legacy_slug' => 'gaji-karyawan',
             ],
             [
-                'name' => 'Sewa Gedung',
+                'name' => 'Rent',
                 'type' => FinanceCategoryType::Expense,
-                'description' => 'Biaya sewa toko atau gudang operasional.',
+                'description' => 'Shop, office, or warehouse rent.',
+                'legacy_slug' => 'sewa-gedung',
             ],
             [
-                'name' => 'Listrik & Air',
+                'name' => 'Utilities',
                 'type' => FinanceCategoryType::Expense,
-                'description' => 'Tagihan utilitas bulanan.',
+                'description' => 'Electricity, water, and other utility bills.',
+                'legacy_slug' => 'listrik-air',
             ],
             [
-                'name' => 'Internet & Telepon',
+                'name' => 'Internet & Phone',
                 'type' => FinanceCategoryType::Expense,
-                'description' => 'Biaya komunikasi dan koneksi internet.',
+                'description' => 'Communication and internet connection costs.',
+                'legacy_slug' => 'internet-telepon',
             ],
             [
-                'name' => 'Pemasaran & Iklan',
+                'name' => 'Marketing & Advertising',
                 'type' => FinanceCategoryType::Expense,
-                'description' => 'Biaya promosi, iklan sosial media, dan cetak.',
+                'description' => 'Promotion, social media ads, and print advertising.',
+                'legacy_slug' => 'pemasaran-iklan',
             ],
             [
-                'name' => 'Perawatan & Perbaikan',
+                'name' => 'Maintenance & Repairs',
                 'type' => FinanceCategoryType::Expense,
-                'description' => 'Biaya maintenance aset dan peralatan.',
+                'description' => 'Maintenance costs for assets and equipment.',
+                'legacy_slug' => 'perawatan-perbaikan',
             ],
             [
-                'name' => 'Transportasi & Logistik',
+                'name' => 'Transport & Logistics',
                 'type' => FinanceCategoryType::Expense,
-                'description' => 'Biaya bensin, pengiriman, dan perjalanan dinas.',
+                'description' => 'Fuel, shipping, and business travel costs.',
+                'legacy_slug' => 'transportasi-logistik',
             ],
             [
-                'name' => 'Pembelian Stok',
+                'name' => 'Stock Purchases',
                 'type' => FinanceCategoryType::Expense,
-                'description' => 'Biaya pembelian barang dagangan (HPP).',
+                'description' => 'Cost of purchasing inventory.',
+                'legacy_slug' => 'pembelian-stok',
             ],
         ];
 
         foreach ($categories as $category) {
-            FinanceCategory::create([
+            $slug = Str::slug($category['name']);
+
+            $financeCategory = FinanceCategory::query()
+                ->where('slug', $slug)
+                ->orWhere('slug', $category['legacy_slug'])
+                ->first();
+
+            $attributes = [
                 'name' => $category['name'],
-                'slug' => Str::slug($category['name']),
+                'slug' => $slug,
                 'type' => $category['type'],
                 'description' => $category['description'],
-            ]);
+            ];
+
+            if ($financeCategory) {
+                $financeCategory->update($attributes);
+                continue;
+            }
+
+            FinanceCategory::create($attributes);
         }
     }
 }
