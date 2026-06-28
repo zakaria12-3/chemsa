@@ -28,6 +28,8 @@ RUN npm ci
 
 COPY resources ./resources
 COPY public ./public
+COPY app/Livewire ./app/Livewire
+COPY app/Enums ./app/Enums
 COPY --from=vendor /app/vendor ./vendor
 COPY postcss.config.js tailwind.config.js vite.config.js ./
 RUN npm run build
