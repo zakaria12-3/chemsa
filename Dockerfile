@@ -16,6 +16,7 @@ COPY config ./config
 COPY database ./database
 COPY routes ./routes
 COPY artisan ./
+RUN mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views bootstrap/cache
 RUN composer dump-autoload --optimize
 
 FROM node:22-alpine AS frontend
