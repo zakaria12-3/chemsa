@@ -27,6 +27,7 @@ RUN npm ci
 
 COPY resources ./resources
 COPY public ./public
+COPY --from=vendor /app/vendor ./vendor
 COPY postcss.config.js tailwind.config.js vite.config.js ./
 RUN npm run build
 
