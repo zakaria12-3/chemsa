@@ -1,0 +1,89 @@
+{
+    "$schema": "https://www.schemastore.org/package.json",
+    "name": "chemsa",
+    "version": "1.0.0",
+    "description": "CHEMSA desktop application",
+    "author": "CHEMSA",
+    "private": true,
+    "type": "module",
+    "main": "electron/main.cjs",
+    "scripts": {
+        "build": "vite build",
+        "dev": "vite",
+        "electron": "electron .",
+        "desktop:prepare": "node scripts/prepare-desktop-build.cjs",
+        "desktop:dist": "npm run desktop:prepare && npm run build && electron-builder --win nsis"
+    },
+    "build": {
+        "appId": "com.chemsa.desktop",
+        "productName": "CHEMSA",
+        "asar": false,
+        "directories": {
+            "output": "dist-desktop",
+            "buildResources": "build"
+        },
+        "files": [
+            "app/**",
+            "bootstrap/**",
+            "config/**",
+            "database/**",
+            "electron/**",
+            "public/**",
+            "resources/views/**",
+            "routes/**",
+            "storage/app/.gitignore",
+            "storage/framework/.gitignore",
+            "storage/framework/cache/.gitignore",
+            "storage/framework/sessions/.gitignore",
+            "storage/framework/testing/.gitignore",
+            "storage/framework/views/.gitignore",
+            "storage/logs/.gitignore",
+            "vendor/**",
+            "artisan",
+            "composer.json",
+            "composer.lock",
+            ".env.example",
+            "package.json"
+        ],
+        "extraResources": [
+            {
+                "from": "build/php",
+                "to": "php",
+                "filter": [
+                    "**/*"
+                ]
+            }
+        ],
+        "win": {
+            "icon": "build/icon.ico",
+            "target": "nsis"
+        },
+        "nsis": {
+            "oneClick": false,
+            "perMachine": false,
+            "allowToChangeInstallationDirectory": true,
+            "installerIcon": "build/icon.ico",
+            "uninstallerIcon": "build/icon.ico",
+            "createDesktopShortcut": true,
+            "createStartMenuShortcut": true
+        }
+    },
+    "devDependencies": {
+        "@tailwindcss/forms": "^0.5.2",
+        "@tailwindcss/vite": "^4.0.0",
+        "alpinejs": "^3.4.2",
+        "autoprefixer": "^10.4.2",
+        "axios": "^1.11.0",
+        "concurrently": "^9.0.1",
+        "electron": "^33.4.11",
+        "electron-builder": "^25.1.8",
+        "laravel-vite-plugin": "^2.0.0",
+        "postcss": "^8.4.31",
+        "tailwindcss": "^3.1.0",
+        "vite": "^7.0.7"
+    },
+    "dependencies": {
+        "flatpickr": "^4.6.13",
+        "tom-select": "^2.4.3"
+    }
+}
